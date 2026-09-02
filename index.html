@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CO-OPSEVA — Cooperative Digital Platform</title>
+
+  <!-- Global Base Styling -->
+  <link rel="stylesheet" href="./shared/css/common.css" />
+
+  <!-- React 18, React DOM, Babel, React Native Web Standalone Modules -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-native-web@0.19.10/dist/react-native-web.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- State & Auth -->
+  <script src="./coopseva-store.js"></script>
+  <script src="./shared/js/auth-guard.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Component Ingestion & Runtime Routing -->
+  <script type="text/babel" src="./components/panel.jsx"></script>
+  <script type="text/babel" src="./components/Customerlogin.jsx"></script>
+  <script type="text/babel" src="./components/workerlogin.jsx"></script>
+  <script type="text/babel" src="./components/workerdashboard.jsx"></script>
+  <script type="text/babel" src="./components/customerdashboard.jsx"></script>
+  <script type="text/babel" src="./components/societydashboard.jsx"></script>
+
+  <!-- App Shell -->
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { View, Text } = ReactNative;
+
+    function App() {
+      const [currentScreen, setCurrentScreen] = useState('Panel');
+      const [screenParams, setScreenParams] = useState({});
+
+      const navigate = (screenName, params = {}) => {
+        setScreenParams(params);
+        setCurrentScreen(screenName);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+
+      const navigation = {
+        navigate: (screen, params) => navigate(screen, params),
+        goBack: () => navigate('Panel')
+      };
+
+      const renderScreen = () => {
+        switch (currentScreen) {
+          case 'Panel':
+            return <PanelNew1 navigation={navigation} onNavigate={(route) => navigate(route)} />;
+          case 'CustomerLogin':
+            return (
+              <CustomerLoginNew
+                navigation={navigation}
+                onLoginSuccess={(meta) => {
+                  AuthGuard.login('customer', meta);
+                  navigate('CustomerDashboard');
+                }}
+                onBack={() => navigate('Panel')}
+              />
+            );
+          case 'WorkerLogin':
+            return (
+              <WorkerLogin
+                navigation={navigation}
+                onLogin={(meta) => {
+                  AuthGuard.login('worker', meta);
+                  navigate('WorkerDashboard');
+                }}
+                onBack={() => navigate('Panel')}
+              />
+            );
+          case 'WorkerDashboard':
+            return (
+              <WorkerDashboard
+                navigation={navigation}
+                onLogout={() => {
+                  AuthGuard.logout();
+                  navigate('Panel');
+                }}
+              />
+            );
+          case 'CustomerDashboard':
+            return <CustomerDashboard navigation={navigation} onLogout={() => navigate('Panel')} />;
+          case 'SocietyLogin':
+          case 'SocietyDashboard':
+            return <SocietyDashboard navigation={navigation} onLogout={() => navigate('Panel')} />;
+          default:
+            return <PanelNew1 navigation={navigation} />;
+        }
+      };
+
+      return (
+        <View style={{ flex: 1, minHeight: '100vh', backgroundColor: '#F3ECE0' }}>
+          {renderScreen()}
+        </View>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>

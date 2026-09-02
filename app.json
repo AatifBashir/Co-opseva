@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "CO-OPSEVA",
+    "slug": "coopseva-app",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F3ECE0"
+    },
+    "web": {
+      "favicon": "./assets/logo.png",
+      "bundler": "metro"
+    },
+    "packagerOpts": {
+      "sourceExts": ["js", "jsx", "json", "ts", "tsx"]
+    }
+  }
+}

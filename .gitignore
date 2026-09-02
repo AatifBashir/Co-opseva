@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+package-lock.json.log
+
+# Expo & Metro
+.expo/
+dist/
+web-build/
+metro-cache/
+
+# Native builds (in case prebuild or run:android/ios is executed later)
+android/
+ios/
+
+# Environment and secrets
+.env
+.env*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor & OS files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
